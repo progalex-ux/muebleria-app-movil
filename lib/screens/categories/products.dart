@@ -240,7 +240,7 @@ class _ProductsState extends State<Products> {
                                       _saveCarrito(index); // Agregar al carrito
                                     },
                                     icon: const Icon(
-                                        Icons.add_shopping_cart_sharp))
+                                        Icons.shopping_cart_sharp))
                               ],
                             )
                           ],
