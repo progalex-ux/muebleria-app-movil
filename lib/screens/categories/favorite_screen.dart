@@ -1,7 +1,7 @@
-import 'package:camilamuebleria/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:camilamuebleria/routes/app_routes.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -36,13 +36,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.productos);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            )),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.productos);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
         automaticallyImplyLeading: true,
         centerTitle: true,
         title: Row(
@@ -59,12 +60,26 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: favoriteItems.isEmpty
-          ? const Center(child: Text('No hay productos en favorito'))
-          : ListView.builder(
-              itemCount: favoriteItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
+      body: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Favoritos',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          favoriteItems.isEmpty
+              ? const Center(child: Text('No hay productos en favorito '))
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: favoriteItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
                       color: Colors.white,
                       elevation: 0,
                       shape: const RoundedRectangleBorder(
@@ -83,8 +98,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 height: 120,
                                 width: 100,
                                 child: FadeInImage(
-                                  placeholder:
-                                      const AssetImage('assets/loading.gif'),
+                                  placeholder: const AssetImage('assets/loading.gif'),
                                   image: NetworkImage(
                                     "http://192.168.1.70/register_users_api/${favoriteItems[index]["image_path"]}",
                                   ),
@@ -97,13 +111,24 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("\$${favoriteItems[index]["price"]}",
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                    "\$${favoriteItems[index]["price"]}",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   const SizedBox(height: 5),
-                                  Text(favoriteItems[index]["description"],
-                                      style: const TextStyle(fontSize: 14)),
+                                  Text(
+                                    favoriteItems[index]["description"],
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  Row(
+                                    children: [
+                                      TextButton(onPressed: () {}, child:const Text('Eliminar')),
+                                      TextButton(onPressed: () {}, child:const Text('Agregar al carrito'))
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -111,8 +136,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         ),
                       ),
                     );
-              },
-            ),
+                  },
+                ),
+        ],
+      ),
     );
   }
 }
