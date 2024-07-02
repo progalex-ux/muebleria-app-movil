@@ -18,39 +18,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 233, 232, 232),
+      backgroundColor: const Color.fromARGB(255, 233, 232, 232),
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          
-          automaticallyImplyLeading: false,
-          centerTitle: false,
-          
-          title: Row(
-            children: [
-              const Text('         '),
-              const Spacer(),
-              Image.asset(
-                'assets/image/camila_logo_bg.png',
-                height: 55, 
-              ),
-              const Spacer(),
-              SizedBox(
-                width: 55,
-                child: IconButton(onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.login);
-                }, icon:const Icon(Icons.exit_to_app, color: Colors.lightGreen,)
-                )
-              // child: CupertinoSearchTextField(
-              //     placeholder: 'Search',
-              //   ),
-              ),
-              
-              
-            ],
-          ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Row(
+          children: [
+            const Text('         '),
+            const Spacer(),
+            Image.asset(
+              'assets/image/camila_logo_bg.png',
+              height: 55,
+            ),
+            const Spacer(),
+          ],
         ),
-    
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.green,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.login);
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,18 +68,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const IconTextCarousel(),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             const CardRow(),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-
 
 class ImageCarousel extends StatelessWidget {
   const ImageCarousel({
@@ -135,8 +132,6 @@ class CardImages extends StatelessWidget {
 class IconTextCarousel extends StatelessWidget {
   const IconTextCarousel({super.key});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -171,17 +166,17 @@ class IconTextCarousel extends StatelessWidget {
   String _getRoute(int index) {
     switch (index) {
       case 0:
-        // return AppRoutes.recamarasScreen;
+      return AppRoutes.productos;
       case 1:
-        // return AppRoutes.salasScreen;
+      return AppRoutes.productos;
       case 2:
-        return AppRoutes.cocinasScreen;
+        return AppRoutes.productos;
       case 3:
-        // return AppRoutes.lineaBlanca;
+      return AppRoutes.productos;
       case 4:
-        // return AppRoutes.electronicaScreen;
+      return AppRoutes.productos;
       case 5:
-        // return AppRoutes.motosScreen;
+      return AppRoutes.productos;
       default:
         return '';
     }
@@ -226,48 +221,59 @@ class IconTextItem extends StatelessWidget {
   }
 }
 
-
 class CardRow extends StatelessWidget {
   const CardRow({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
           children: [
-            Expanded(
-            child: CardProductos(imageSuperior: 'assets/card/iphone_icon.png', title: '\$4999', description: 'Iphone 11 64gb Color negro',), 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CardProductos(
+                    imageSuperior: 'assets/card/iphone_icon.png',
+                    title: '\$4999',
+                    description: 'Iphone 11 64gb Color negro',
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: CardProductos(
+                    imageSuperior: 'assets/card/laptop_icon.png',
+                    title: '\$8,999',
+                    description: 'Laptop HP Ryzen 3 5450u 16gb ram 256ssd',
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 8),
-            Expanded(
-              child: CardProductos(imageSuperior: 'assets/card/laptop_icon.png', title: '\$8,999', description: 'Laptop HP Ryzen 3 5450u 16gb ram 256ssd',),
-            ),   
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CardProductos(
+                    imageSuperior: 'assets/card/television_icon.png',
+                    title: '\$6,999',
+                    description: "Smart TV LG 42'Pulgadas ",
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: CardProductos(
+                    imageSuperior: 'assets/card/refrigerador_icon.png',
+                    title: '\$12,999',
+                    description: 'Refrigerador Samsung Duplex',
+                  ),
+                ),
+              ],
+            ),
           ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: CardProductos(imageSuperior: 'assets/card/television_icon.png', title: '\$6,999', description: "Smart TV LG 42'Pulgadas ",), 
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: CardProductos(imageSuperior: 'assets/card/refrigerador_icon.png', title: '\$12,999', description: 'Refrigerador Samsung Duplex',),
-            ),
-      
-          ],
-        ),
-       ],
-      )
-    );
+        ));
   }
 }
-
-
 
 class CardProductos extends StatelessWidget {
   final String imageSuperior;
@@ -285,7 +291,7 @@ class CardProductos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5.0,
-      color:Colors.white,
+      color: Colors.white,
       child: Container(
         padding: const EdgeInsets.all(0.0),
         height: 280,
@@ -296,11 +302,12 @@ class CardProductos extends StatelessWidget {
               width: double.maxFinite,
               height: 175,
               decoration: BoxDecoration(
-                borderRadius:const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12)),
                 image: DecorationImage(
                   image: AssetImage(imageSuperior),
                   fit: BoxFit.contain,
-                  
                 ),
               ),
             ),

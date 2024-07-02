@@ -1,3 +1,6 @@
+import 'package:camilamuebleria/screens/categories/carrito_screen.dart';
+import 'package:camilamuebleria/screens/categories/products.dart';
+import 'package:camilamuebleria/screens/categories/favorite_screen.dart';
 import 'package:camilamuebleria/screens/home_screen.dart';
 import 'package:camilamuebleria/screens/login_screen.dart';
 import 'package:camilamuebleria/screens/register_screen.dart';
@@ -10,11 +13,12 @@ class AppRoutes {
   static const String login = '/';
   static const String register = 'register';
   static const String home = 'home';
-  static const String cocinasScreen = 'cocinas_screen';
   static const String productos = 'products';
   static const String view = 'view_data';
   static const String update = 'update_data';
   static const String insert = 'insert_data';
+  static const String carrito = 'carritoscreen';
+  static const String favorite = 'favoritescreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -22,12 +26,18 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
+      case productos:
+          return MaterialPageRoute(builder: (_) => const Products());
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case view:
         return MaterialPageRoute(builder: (_) => const ViewProducts());
       case insert:
         return MaterialPageRoute(builder: (_) => const InsertProducts());
+      case carrito:
+        return MaterialPageRoute(builder: (_) => const CarritoScreen());
+      case favorite:
+        return MaterialPageRoute(builder: (_) => const FavoriteScreen());
       case update:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(

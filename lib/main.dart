@@ -13,11 +13,12 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+          appBarTheme:
+              const AppBarTheme(iconTheme: IconThemeData(color: Colors.white))),
       initialRoute: AppRoutes.login,
-      onGenerateRoute: AppRoutes.generateRoute, 
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }

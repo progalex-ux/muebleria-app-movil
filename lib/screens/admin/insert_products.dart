@@ -1,11 +1,12 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
-
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:camilamuebleria/routes/app_routes.dart';
+import 'package:intl/intl.dart';
 
 class InsertProducts extends StatefulWidget {
   const InsertProducts({super.key});
@@ -17,6 +18,7 @@ class InsertProducts extends StatefulWidget {
 class _InsertProductsState extends State<InsertProducts> {
   TextEditingController price = TextEditingController();
   TextEditingController description = TextEditingController();
+  NumberFormat numberFormat = NumberFormat("#,###");
 
   File? imagepath;
   String? imagename;
@@ -26,7 +28,7 @@ class _InsertProductsState extends State<InsertProducts> {
 
   Future<void> uploadImage() async {
     try {
-      String url = "http://192.168.1.74/register_users_api/insert_products.php";
+      String url = "http://192.168.1.70/register_users_api/insert_products.php";
       var res = await http.post(Uri.parse(url), body: {
         "price": price.text,
         "description": description.text,
@@ -53,7 +55,6 @@ class _InsertProductsState extends State<InsertProducts> {
         ));
       }
     } catch (e) {
-      // print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error: $e"),
         duration: const Duration(seconds: 2),
@@ -72,68 +73,152 @@ class _InsertProductsState extends State<InsertProducts> {
     }
   }
 
+  void onTabTapped(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, AppRoutes.insert);
+        break;
+      case 1:
+        Navigator.pushNamed(context, AppRoutes.view);
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Agregar un producto',
-          style: TextStyle(color: Colors.white,),
+          'Agrega un producto',
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.login);
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20,),
+              const SizedBox(height: 50),
               SizedBox(
-                height: 200,
-                child: imagepath != null
-                    ? Image.file(imagepath!)
-                    : const Text('Ninguna imagen seleccionada'),
+                height: 180,
+                child:
+                    imagepath != null ? Image.file(imagepath!) : const Text(''),
               ),
               ElevatedButton(
                 onPressed: getImage,
                 child: const Text('Seleccionar una imagen'),
               ),
+              const SizedBox(
+                height: 10,
+              ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: TextFormField(
                   controller: price,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Ingresa un precio',
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: InputDecoration(
+                    hintText: 'Ingresa un precio',
+                    filled: true,
+                    fillColor: const Color.fromARGB(26, 76, 175, 79),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
+                  onChanged: (value) {
+                    String formattedValue = numberFormat
+                        .format(int.parse(value.replaceAll(',', '')));
+                    price.value = TextEditingValue(
+                      text: formattedValue,
+                      selection: TextSelection.collapsed(
+                          offset: formattedValue.length),
+                    );
+                  },
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(
+                height: 10,
+              ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: TextFormField(
                   controller: description,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Ingresa la descripción',
+                  decoration: InputDecoration(
+                    hintText: 'Ingresa la descripcion',
+                    filled: true,
+                    fillColor: const Color.fromARGB(26, 76, 175, 79),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18)),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: uploadImage,
-                child: const Text('Registrar'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.view);
-                },
-                child: const Text('Ver productos'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                child: const Text(
+                  'Agregar',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        elevation: 0,
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
+        onTap: onTabTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Insertar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_list),
+            label: 'Ver',
+          ),
+        ],
       ),
     );
   }
