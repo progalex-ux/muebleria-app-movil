@@ -13,6 +13,7 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
   final _cvvController = TextEditingController();
   DateTime? _selectedExpiryDate;
   String? _cardType;
+  String? _invalidCardMessage;
 
   @override
   void dispose() {
@@ -39,10 +40,16 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
   void _identifyCardType(String input) {
     if (input.startsWith(RegExp(r'4'))) {
       _cardType = 'visa';
+      _invalidCardMessage = null;
     } else if (input.startsWith(RegExp(r'5[1-5]'))) {
       _cardType = 'mastercard';
+      _invalidCardMessage = null;
+    } else if (input.isNotEmpty) {
+      _cardType = null;
+      _invalidCardMessage = 'Tarjeta de crédito no válida';
     } else {
       _cardType = null;
+      _invalidCardMessage = null;
     }
   }
 
@@ -60,7 +67,7 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Ingresa los datos de tu tarjeta de crédito',
+                      'Ingresa los datos de tu tarjeta',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -81,6 +88,7 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
                                 ),
                               )
                             : null,
+                        errorText: _invalidCardMessage,
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -119,7 +127,7 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
                               labelText: 'CVV',
                               border: OutlineInputBorder(),
                               counterText:
-                                  '', 
+                                  '', // Oculta el contador de caracteres
                             ),
                           ),
                         ),
