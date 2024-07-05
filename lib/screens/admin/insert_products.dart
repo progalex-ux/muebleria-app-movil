@@ -28,7 +28,7 @@ class _InsertProductsState extends State<InsertProducts> {
 
   Future<void> uploadImage() async {
     try {
-      String url = "http://192.168.1.70/register_users_api/insert_products.php";
+      String url = "http://192.168.1.74/register_users_api/insert_products.php";
       var res = await http.post(Uri.parse(url), body: {
         "price": price.text,
         "description": description.text,

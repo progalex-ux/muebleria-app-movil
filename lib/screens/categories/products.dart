@@ -21,7 +21,7 @@ class _ProductsState extends State<Products> {
 
   Future<void> imageformdb() async {
     try {
-      String url = "http://192.168.1.70/register_users_api/view_data.php";
+      String url = "http://192.168.1.74/register_users_api/view_data.php";
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         setState(() {
@@ -193,12 +193,12 @@ class _ProductsState extends State<Products> {
                                 bottomLeft: Radius.circular(8),
                               ),
                               child: SizedBox(
-                                height: 120,
+                                height: 200,
                                 width: 100,
                                 child: FadeInImage(
                                   placeholder: const AssetImage('assets/loading.gif'),
                                   image: NetworkImage(
-                                    "http://192.168.1.70/register_users_api/${record[index]["image_path"]}",
+                                    "http://192.168.1.74/register_users_api/${record[index]["image_path"]}",
                                   ),
                                   fit: BoxFit.contain,
                                 ),
@@ -237,10 +237,10 @@ class _ProductsState extends State<Products> {
                                 ),
                                 IconButton(
                                     onPressed: () {
-                                      _saveCarrito(index); // Agregar al carrito
+                                      _saveCarrito(index); 
                                     },
                                     icon: const Icon(
-                                        Icons.shopping_cart_sharp))
+                                        Icons.shopping_cart_outlined))
                               ],
                             )
                           ],

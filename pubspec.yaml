@@ -38,3 +38,7 @@ flutter:
     - assets/card/television_icon.png
     - assets/card/refrigerador_icon.png
     - assets/image/camila_logo_bg.png
+    - assets/payment/visa.png
+    - assets/payment/mastercard.png
+
+

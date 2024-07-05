@@ -100,7 +100,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 child: FadeInImage(
                                   placeholder: const AssetImage('assets/loading.gif'),
                                   image: NetworkImage(
-                                    "http://192.168.1.70/register_users_api/${favoriteItems[index]["image_path"]}",
+                                    "http://192.168.1.74/register_users_api/${favoriteItems[index]["image_path"]}",
                                   ),
                                   fit: BoxFit.contain,
                                 ),

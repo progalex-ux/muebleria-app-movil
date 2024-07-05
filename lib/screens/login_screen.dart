@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> iniciarSesion(String correo, String password) async {
     var url =
-        Uri.parse('http://192.168.1.70/register_users_api/login_user.php');
+        Uri.parse('http://192.168.1.74/register_users_api/login_user.php');
     var response = await http.post(url, body: {
       'mail': correo,
       'password': password,

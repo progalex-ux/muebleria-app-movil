@@ -17,7 +17,7 @@ class _ViewProductsState extends State<ViewProducts> {
 
   Future<void> imageformdb() async {
     try {
-      String url = "http://192.168.1.70/register_users_api/view_data.php";
+      String url = "http://192.168.1.74/register_users_api/view_data.php";
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         setState(() {
@@ -33,7 +33,7 @@ class _ViewProductsState extends State<ViewProducts> {
 
   Future<void> deleteProduct(int id) async {
     String deleteUrl =
-        "http://192.168.1.70/register_users_api/delete_record.php";
+        "http://192.168.1.74/register_users_api/delete_record.php";
     try {
       var response = await http.post(
         Uri.parse(deleteUrl),
@@ -117,7 +117,7 @@ class _ViewProductsState extends State<ViewProducts> {
                       child: FadeInImage(
                         placeholder: const AssetImage('assets/loading.gif'),
                         image: NetworkImage(
-                          "http://192.168.1.70/register_users_api/${record[index]["image_path"]}",
+                          "http://192.168.1.74/register_users_api/${record[index]["image_path"]}",
                         ),
                         fit: BoxFit.contain,
                       ),

@@ -7,6 +7,7 @@ import 'package:camilamuebleria/screens/register_screen.dart';
 import 'package:camilamuebleria/screens/admin/view_products.dart';
 import 'package:camilamuebleria/screens/admin/update_products.dart';
 import 'package:camilamuebleria/screens/admin/insert_products.dart';
+import 'package:camilamuebleria/screens/payment/pago_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String insert = 'insert_data';
   static const String carrito = 'carritoscreen';
   static const String favorite = 'favoritescreen';
+  static const String metodopago = 'metodopago';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -36,6 +38,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const InsertProducts());
       case carrito:
         return MaterialPageRoute(builder: (_) => const CarritoScreen());
+      case metodopago:
+        return MaterialPageRoute(builder: (_) => const MetodoPagoScreen());
       case favorite:
         return MaterialPageRoute(builder: (_) => const FavoriteScreen());
       case update:

@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         mail.text.isNotEmpty &&
         password.text.isNotEmpty) {
       try {
-        String uri = "http://192.168.1.70/register_users_api/insert_record.php";
+        String uri = "http://192.168.1.74/register_users_api/insert_record.php";
         var res = await http.post(Uri.parse(uri), body: {
           "user": user.text,
           "mail": mail.text,

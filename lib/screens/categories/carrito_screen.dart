@@ -26,7 +26,8 @@ class _CarritoScreenState extends State<CarritoScreen> {
     String? carritoItemsString = prefs.getString('carritoItems');
     if (carritoItemsString != null && carritoItemsString.isNotEmpty) {
       setState(() {
-        carritoItems = List<Map<String, dynamic>>.from(jsonDecode(carritoItemsString));
+        carritoItems =
+            List<Map<String, dynamic>>.from(jsonDecode(carritoItemsString));
         selectedQuantities = List<int>.filled(carritoItems.length, 1);
       });
     }
@@ -43,8 +44,20 @@ class _CarritoScreenState extends State<CarritoScreen> {
     }
   }
 
+  double _calculateTotal() {
+    double total = 0;
+    for (int i = 0; i < carritoItems.length; i++) {
+      String priceString =
+          carritoItems[i]["price"].toString().replaceAll(',', '');
+      double price = double.tryParse(priceString) ?? 0;
+      total += price;
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double total = _calculateTotal();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -112,9 +125,10 @@ class _CarritoScreenState extends State<CarritoScreen> {
                                 height: 120,
                                 width: 100,
                                 child: FadeInImage(
-                                  placeholder: const AssetImage('assets/loading.gif'),
+                                  placeholder:
+                                      const AssetImage('assets/loading.gif'),
                                   image: NetworkImage(
-                                    "http://192.168.1.70/register_users_api/${carritoItems[index]["image_path"]}",
+                                    "http://192.168.1.74/register_users_api/${carritoItems[index]["image_path"]}",
                                   ),
                                   fit: BoxFit.contain,
                                 ),
@@ -136,33 +150,41 @@ class _CarritoScreenState extends State<CarritoScreen> {
                                       ),
                                       const Spacer(),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2),
                                         child: Container(
                                           height: 40,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.grey),
-                                            borderRadius: BorderRadius.circular(8),
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton2(
                                               value: selectedQuantities[index],
                                               onChanged: (int? newValue) {
                                                 setState(() {
-                                                  selectedQuantities[index] = newValue!;
+                                                  selectedQuantities[index] =
+                                                      newValue!;
                                                 });
                                               },
-                                              dropdownStyleData: DropdownStyleData(
+                                              dropdownStyleData:
+                                                  DropdownStyleData(
                                                 elevation: 1,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(8),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
                                                 ),
                                               ),
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 16,
                                               ),
-                                              items: <int>[1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
+                                              items: <int>[1, 2, 3, 4]
+                                                  .map<DropdownMenuItem<int>>(
+                                                      (int value) {
                                                 return DropdownMenuItem<int>(
                                                   value: value,
                                                   child: Text(
@@ -219,28 +241,58 @@ class _CarritoScreenState extends State<CarritoScreen> {
         ],
       ),
       bottomNavigationBar: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextButton(
-            onPressed: () {
-              // Acción al presionar el botón
-            },
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(Colors.green),
-              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+        height: 107,
+        child: Column(
+          children: [
+            const SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,),
+              child: Row(
+                children: [
+                  const Text(
+                    'Total a pagar: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    '\$${total.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.metodopago);
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.green),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    'Continuar compra',
+                    style: TextStyle(
+                      fontSize: 17.0,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
-            child: const Text(
-              'Continuar compra',
-              style: TextStyle(
-                fontSize: 17.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          ],
         ),
       ),
     );

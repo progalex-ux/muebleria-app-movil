@@ -57,7 +57,7 @@ class _UpdateProductsState extends State<UpdateProducts> {
       _isLoading = true;
     });
     try {
-      String url = "http://192.168.1.70/register_users_api/update_record.php";
+      String url = "http://192.168.1.74/register_users_api/update_record.php";
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['id'] = widget.id;
       request.fields['price'] = priceController.text;
