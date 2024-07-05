@@ -61,171 +61,176 @@ class _MetodoPagoScreenState extends State<MetodoPagoScreen> {
       ),
       body: _selectedPaymentMethod == 'credit_card'
           ? SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Ingresa los datos de tu tarjeta',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: _creditCardNumberController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Número de Tarjeta',
-                        border: const OutlineInputBorder(),
-                        prefixIcon: _cardType != null
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  'assets/payment/$_cardType.png',
-                                  width: 30,
-                                  height: 30,
-                                ),
-                              )
-                            : null,
-                        errorText: _invalidCardMessage,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _identifyCardType(value);
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => _selectExpiryDate(context),
-                            child: AbsorbPointer(
-                              child: TextField(
-                                controller: TextEditingController(
-                                  text: _selectedExpiryDate == null
-                                      ? ''
-                                      : '${_selectedExpiryDate!.month}/${_selectedExpiryDate!.year % 100}',
-                                ),
-                                decoration: const InputDecoration(
-                                  labelText: 'Fecha de Expiración (MM/AA)',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: _cvvController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 4,
-                            decoration: const InputDecoration(
-                              labelText: 'CVV',
-                              border: OutlineInputBorder(),
-                              counterText:
-                                  '', // Oculta el contador de caracteres
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          String cardNumber = _creditCardNumberController.text;
-                          String expiryDate = _selectedExpiryDate != null
-                              ? '${_selectedExpiryDate!.month}/${_selectedExpiryDate!.year % 100}'
-                              : '';
-                          String cvv = _cvvController.text;
-                        },
-                        child: const Text('Confirmar Pago'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: tarjetaCredito(context),
             )
           : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Selecciona tu método de pago',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    ListTile(
-                      leading: const Icon(Icons.credit_card),
-                      title: const Text('Tarjeta de Crédito'),
-                      trailing: Radio<String>(
-                        value: 'credit_card',
-                        groupValue: _selectedPaymentMethod,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedPaymentMethod = value;
-                          });
-                        },
+              child: metodoPago(context),
+            ),
+    );
+  }
+
+  Padding metodoPago(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Selecciona tu método de pago',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          ListTile(
+            leading: const Icon(Icons.credit_card),
+            title: const Text('Tarjeta de Crédito'),
+            trailing: Radio<String>(
+              value: 'credit_card',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedPaymentMethod = value;
+                });
+              },
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_balance_wallet),
+            title: const Text('PayPal'),
+            trailing: Radio<String>(
+              value: 'paypal',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedPaymentMethod = value;
+                });
+              },
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.money),
+            title: const Text('Pago en Efectivo'),
+            trailing: Radio<String>(
+              value: 'cash',
+              groupValue: _selectedPaymentMethod,
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedPaymentMethod = value;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: _selectedPaymentMethod != null
+                  ? () {
+                      if (_selectedPaymentMethod == 'credit_card') {
+                        setState(() {
+                          // Muestra la vista de tarjeta de crédito
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Método de pago seleccionado: $_selectedPaymentMethod')),
+                        );
+                      }
+                    }
+                  : null,
+              child: const Text('Continuar'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding tarjetaCredito(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Ingresa los datos de tu tarjeta',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _creditCardNumberController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Número de Tarjeta',
+              border: const OutlineInputBorder(),
+              prefixIcon: _cardType != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'assets/payment/$_cardType.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                    )
+                  : null,
+              errorText: _invalidCardMessage,
+            ),
+            onChanged: (value) {
+              setState(() {
+                _identifyCardType(value);
+              });
+            },
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _selectExpiryDate(context),
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: TextEditingController(
+                        text: _selectedExpiryDate == null
+                            ? ''
+                            : '${_selectedExpiryDate!.month}/${_selectedExpiryDate!.year % 100}',
+                      ),
+                      decoration: const InputDecoration(
+                        labelText: 'Fecha de Expiración (MM/AA)',
+                        border: OutlineInputBorder(),
                       ),
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.account_balance_wallet),
-                      title: const Text('PayPal'),
-                      trailing: Radio<String>(
-                        value: 'paypal',
-                        groupValue: _selectedPaymentMethod,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedPaymentMethod = value;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.money),
-                      title: const Text('Pago en Efectivo'),
-                      trailing: Radio<String>(
-                        value: 'cash',
-                        groupValue: _selectedPaymentMethod,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedPaymentMethod = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _selectedPaymentMethod != null
-                            ? () {
-                                if (_selectedPaymentMethod == 'credit_card') {
-                                  setState(() {
-                                    // Muestra la vista de tarjeta de crédito
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Método de pago seleccionado: $_selectedPaymentMethod')),
-                                  );
-                                }
-                              }
-                            : null,
-                        child: const Text('Continuar'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  controller: _cvvController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  decoration: const InputDecoration(
+                    labelText: 'CVV',
+                    border: OutlineInputBorder(),
+                    counterText: '', // Oculta el contador de caracteres
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                String cardNumber = _creditCardNumberController.text;
+                String expiryDate = _selectedExpiryDate != null
+                    ? '${_selectedExpiryDate!.month}/${_selectedExpiryDate!.year % 100}'
+                    : '';
+                String cvv = _cvvController.text;
+              },
+              child: const Text('Confirmar Pago'),
             ),
+          ),
+        ],
+      ),
     );
   }
 }
